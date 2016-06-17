@@ -18,26 +18,48 @@ function getRandomInt(max) {
 var enemies = _.range(30);
 
 //binding the enemies to the actual svg elements and appending ellipses
-svg.selectAll("ellipse")
+svg.selectAll(".enemy")
   .data(enemies)
   .enter()
   .append("ellipse")
   .attr("cx", function(){ return getRandomInt(width)})
   .attr("cy", function(){ return getRandomInt(height)})
   .attr("rx", "10")
-  .attr("ry", "10");
-
+  .attr("ry", "10")
+  .attr("class", "enemy")
+  .style("fill", "red");
 
 // setInterval(cb, time)
 //reset the position of the element every second
 setInterval(function(){
-  svg.selectAll("ellipse")
+  svg.selectAll(".enemy")
   .data(enemies)
   .transition()
   .duration(1000)
   .attr("cx", function(){ return getRandomInt(width)})
   .attr("cy", function(){ return getRandomInt(height)});
 }, 2000);
+
+// create player
+
+var drag = d3.behavior.drag()
+  .on('drag', function () {
+    d3.select(this)
+      .attr("cx", d3.event.x)
+      .attr("cy", d3.event.y)
+  });
+
+var player = svg.selectAll(".player")
+  .data([0])
+  .enter()
+  .append("ellipse")
+  .attr("cx", width / 2)
+  .attr("cy", height / 2)
+  .attr("rx", "10")
+  .attr("ry", "10")
+  .attr("class", "player")
+  .style("fill", "green")
+  .call(drag);
 
 
 
