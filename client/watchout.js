@@ -29,7 +29,15 @@ svg.selectAll("ellipse")
 
 
 // setInterval(cb, time)
-
+//reset the position of the element every second
+setInterval(function(){
+  svg.selectAll("ellipse")
+  .data(enemies)
+  .transition()
+  .duration(1000)
+  .attr("cx", function(){ return getRandomInt(width)})
+  .attr("cy", function(){ return getRandomInt(height)});
+}, 2000);
 
 
 
