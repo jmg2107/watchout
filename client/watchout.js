@@ -1,6 +1,8 @@
 // start slingin' some d3 here.
 var width = 800;
 var height = 600;
+var currentScore = 0;
+var highScore = 0;
 
 //draw the svg element
 var svg = d3.select(".board").append("svg")
@@ -15,11 +17,11 @@ function getRandomInt(max) {
 //draw the enemies inside of the svg element
 
 //creates all the enemies to bind to the DOM via data
-var enemies = _.range(30);
+var enemiesRange = _.range(30);
 
 //binding the enemies to the actual svg elements and appending ellipses
-svg.selectAll(".enemy")
-  .data(enemies)
+var enemies = svg.selectAll(".enemy")
+  .data(enemiesRange)
   .enter()
   .append("ellipse")
   .attr("cx", function(){ return getRandomInt(width)})
@@ -32,9 +34,7 @@ svg.selectAll(".enemy")
 // setInterval(cb, time)
 //reset the position of the element every second
 setInterval(function(){
-  svg.selectAll(".enemy")
-  .data(enemies)
-  .transition()
+  enemies.transition()
   .duration(1000)
   .attr("cx", function(){ return getRandomInt(width)})
   .attr("cy", function(){ return getRandomInt(height)});
@@ -60,6 +60,34 @@ var player = svg.selectAll(".player")
   .attr("class", "player")
   .style("fill", "green")
   .call(drag);
+
+
+var checkCollision = function(){
+
+  enemies.each(function(){
+    var element = d3.select(this);
+    var xDiff = player.attr("cx") - element.attr("cx");
+    var yDiff = player.attr("cy") - element.attr("cy");
+    var separation = Math.sqrt( Math.pow(xDiff,2) + Math.pow(yDiff,2) );
+    if(separation <= 20){
+      if(currentScore > highScore){
+        highScore = currentScore;
+        d3.select(".highscore").text("High Score: " + highScore);
+      }
+      currentScore = 0;
+    }
+  });
+}
+
+// setInterval(checkCollision, 16)  <-- frame
+//every 16 ms check if we've collided and update the scores
+setInterval(function(){
+  checkCollision();
+  currentScore++;
+  // .text(currentScore)
+  d3.select(".current").text("Current Score: " + currentScore);
+}, 16);
+
 
 
 
