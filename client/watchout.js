@@ -28,6 +28,9 @@ svg.selectAll("ellipse")
   .attr("ry", "10");
 
 
+// setInterval(cb, time)
+
+
 
 
 
