@@ -3,6 +3,7 @@ var width = 800;
 var height = 600;
 var currentScore = 0;
 var highScore = 0;
+var collisions = 0;
 
 //draw the svg element
 var svg = d3.select(".board").append("svg")
@@ -75,6 +76,9 @@ var checkCollision = function(){
         d3.select(".highscore").text("High Score: " + highScore);
       }
       currentScore = 0;
+
+      collisions++;
+      d3.select(".collisions").text("Collisions: " + collisions);
     }
   });
 }
