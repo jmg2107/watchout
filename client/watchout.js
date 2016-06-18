@@ -6,9 +6,7 @@ var highScore = 0;
 var collisions = 0;
 
 //draw the svg element
-var svg = d3.select(".board").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+var svg = d3.select(".board");
 
 //create random positions within width and height
 function getRandomInt(max) {
@@ -24,21 +22,21 @@ var enemiesRange = _.range(30);
 var enemies = svg.selectAll(".enemy")
   .data(enemiesRange)
   .enter()
-  .append("ellipse")
-  .attr("cx", function(){ return getRandomInt(width)})
-  .attr("cy", function(){ return getRandomInt(height)})
-  .attr("rx", "10")
-  .attr("ry", "10")
+  .append("image")
+  .attr("x", function(){ return getRandomInt(width)})
+  .attr("y", function(){ return getRandomInt(height)})
+  .attr("width", "20")
+  .attr("height", "20")
   .attr("class", "enemy")
-  .style("fill", "red");
+  .attr("xlink:href", "asteroid.png");   // xlink:href
 
 // setInterval(cb, time)
 //reset the position of the element every second
 setInterval(function(){
   enemies.transition()
   .duration(1000)
-  .attr("cx", function(){ return getRandomInt(width)})
-  .attr("cy", function(){ return getRandomInt(height)});
+  .attr("x", function(){ return getRandomInt(width)})
+  .attr("y", function(){ return getRandomInt(height)});
 }, 2000);
 
 // create player
@@ -62,13 +60,17 @@ var player = svg.selectAll(".player")
   .style("fill", "green")
   .call(drag);
 
-
 var checkCollision = function(){
 
   enemies.each(function(){
     var element = d3.select(this);
-    var xDiff = player.attr("cx") - element.attr("cx");
-    var yDiff = player.attr("cy") - element.attr("cy");
+    var enemyX = parseInt(element.attr("x"));  // if u dont do this you get some garbage reference value
+    var enemyY = parseInt(element.attr("y"));
+    var playerX = parseInt(player.attr("cx"));
+    var playerY = parseInt(player.attr("cy"));
+
+    var xDiff = Math.abs(playerX - (enemyX + 10));
+    var yDiff = Math.abs(playerY - (enemyY + 10));
     var separation = Math.sqrt( Math.pow(xDiff,2) + Math.pow(yDiff,2) );
     if(separation <= 20){
       if(currentScore > highScore){
@@ -91,8 +93,6 @@ setInterval(function(){
   // .text(currentScore)
   d3.select(".current").text("Current Score: " + currentScore);
 }, 16);
-
-
 
 
 

@@ -2,3 +2,20 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
+
+.enemy {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: whirl;
+  transform-origin: 50% 50% 0;
+}
+
+@keyframes whirl {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
